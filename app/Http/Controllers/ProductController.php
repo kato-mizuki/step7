@@ -10,23 +10,38 @@ use Illuminate\Http\Request; // Requestクラスという機能を使えるよ�
 
 class ProductController extends Controller //コントローラークラスを継承します（コントローラーの機能が使えるようになります）
 {
-    
-    public function index()
-    {
-        // 全ての商品情報を取得しています。これが商品一覧画面で使われます。
-        $products = Product::all(); 
-        //productsという名前は任意名です。何を格納しているのかわかりやすい名前を付けます
-        //Productはモデル名を指しています。どのテーブルを操作するか指定します
-        //::all();はデータベーステーブルの全てのデータを取得するためのメソッドです
-        //$productsにはProductテーブルの全てのデータが取得し格納されます
+    public function company(){
+        $companies = Company::all();
 
-        // 商品一覧画面を表示します。その際に、先ほど取得した全ての商品情報を画面に渡します。
-        return view('products.index', compact('products'));
-        // productsディレクトリのindex.blade.phpを表示させます
-        // compact('products')によって
-        // $productsという変数の内容が、ビューファイル側で利用できるようになります。
-        // ビューファイル内で$productsと書くことでその変数の中身にアクセスできます。
+        return view('product.index', ['companies' => $companies]);
     }
+    
+    public function index(Request $request)
+    {
+        // Productモデルに基づいてクエリビルダを初期化
+        $query = Product::query();
+        // この行の後にクエリを逐次構築していきます。
+        // そして、最終的にそのクエリを実行するためのメソッド（例：get(), first(), paginate() など）を呼び出すことで、データベースに対してクエリを実行します。
+    
+        // 商品名の検索キーワードがある場合、そのキーワードを含む商品をクエリに追加
+        if($search = $request->search){
+            $query->where('product_name', 'LIKE', "%{$search}%");
+        }
+    
+        // メーカー名の検索
+        if($search = $request->search){
+            $query->where('company_name',  'LIKE', "%{$search}%");
+        }
+    
+        
+        $products = $query->paginate(10);
+    
+        // 商品一覧ビューを表示し、取得した商品情報をビューに渡す
+        return view('product.index', ['products' => $products]);
+    }
+    
+
+
 
     public function create()
     {
@@ -34,7 +49,7 @@ class ProductController extends Controller //コントローラークラスを�
         $companies = Company::all();
 
         // 商品作成画面を表示します。その際に、先ほど取得した全ての会社情報を画面に渡します。
-        return view('products.create', compact('companies'));
+        return view('product.create', compact('companies'));
     }
 
     // 送られたデータをデータベースに保存するメソッドです
@@ -100,7 +115,7 @@ class ProductController extends Controller //コントローラークラスを�
     //(Product $product) 指定されたIDで商品をデータベースから自動的に検索し、その結果を $product に割り当てます。
     {
         // 商品詳細画面を表示します。その際に、商品の詳細情報を画面に渡します。
-        return view('products.show', ['product' => $product]);
+        return view('product.show', ['product' => $product]);
     //　ビューへproductという変数が使えるように値を渡している
     // ['product' => $product]でビューでproductを使えるようにしている
     // compact('products')と行うことは同じであるためどちらでも良い
@@ -112,7 +127,7 @@ class ProductController extends Controller //コントローラークラスを�
         $companies = Company::all();
 
         // 商品編集画面を表示します。その際に、商品の情報と会社の情報を画面に渡します。
-        return view('products.edit', compact('product', 'companies'));
+        return view('product.edit', compact('product', 'companies'));
     }
 
     public function update(Request $request, Product $product)
@@ -136,7 +151,7 @@ class ProductController extends Controller //コントローラークラスを�
         // モデルインスタンスである$productに対して行われた変更をデータベースに保存するためのメソッド（機能）です。
 
         // 全ての処理が終わったら、商品一覧画面に戻ります。
-        return redirect()->route('products.index')
+        return redirect()->route('product.index')
             ->with('success', 'Product updated successfully');
         // ビュー画面にメッセージを代入した変数(success)を送ります
     }
@@ -148,7 +163,7 @@ class ProductController extends Controller //コントローラークラスを�
         $product->delete();
 
         // 全ての処理が終わったら、商品一覧画面に戻ります。
-        return redirect('/products');
+        return redirect('/product');
         //URLの/productsを検索します
         //products　/がなくても検索できます
     }

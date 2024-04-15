@@ -38,7 +38,7 @@
 
         <div class="mb-3">
             <label for="comment" class="form-label">コメント:</label>
-            <textarea id="comment" name="comment" class="form-control" rows="3" required></textarea>
+            <textarea id="comment" name="comment" class="form-control" rows="3"></textarea>
         </div>
 
         <div class="mb-3">
