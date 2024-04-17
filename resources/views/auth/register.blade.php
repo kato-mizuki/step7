@@ -14,12 +14,11 @@
                     <tr><td></td></tr>
                 </thead>
                 <tbody>
-                    <form method="POST" action="{{ route('register') }}">
-                     @csrf
                     <tr>
                         <td>
                         <div class="card-body">
-                            
+                            <form method="POST" action="{{ route('register') }}">
+                                @csrf
 
                                 <div class="form-group row">
                                         <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password" placeholder="パスワード">
@@ -59,7 +58,7 @@
                                     {{ __('新規登録') }}
                                 </button>
                             </div>
-                            
+                            </form>
                         </td>
                         <td>
                             <div style="margin-top:20px">
@@ -69,7 +68,6 @@
                             </div>
                         </td>
                     </tr>
-                </form>
                 </tbody>
             </table>
         </div>

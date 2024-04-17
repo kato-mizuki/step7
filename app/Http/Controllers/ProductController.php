@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product; // Productモデルを現在のファイルで使用できるようにするための宣言です。
 use App\Models\Company; // Companyモデルを現在のファイルで使用できるようにするための宣言です。
+use App\Requests\CreateRequest; //バリデーション適用できるようにするのための宣言です。
 use Illuminate\Http\Request; // Requestクラスという機能を使えるように宣言します
 // Requestクラスはブラウザに表示させるフォームから送信されたデータをコントローラのメソッドで引数として受け取ることができます。
 
@@ -38,6 +39,9 @@ class ProductController extends Controller //コントローラークラスを�
     
         // 商品一覧ビューを表示し、取得した商品情報をビューに渡す
         return view('product.index', ['products' => $products]);
+        return view('product.create', compact('companies'), [
+            'rules' => $validation->rules()
+        ]);
     }
     
 
@@ -47,9 +51,12 @@ class ProductController extends Controller //コントローラークラスを�
     {
         // 商品作成画面で会社の情報が必要なので、全ての会社の情報を取得します。
         $companies = Company::all();
-
+        $validation = new CreateRequest();
+        return view('products.create', [
+            'rules' => $validation->rules(),
+        ]);
         // 商品作成画面を表示します。その際に、先ほど取得した全ての会社情報を画面に渡します。
-        return view('product.create', compact('companies'));
+       
     }
 
     // 送られたデータをデータベースに保存するメソッドです
@@ -125,9 +132,13 @@ class ProductController extends Controller //コントローラークラスを�
     {
         // 商品編集画面で会社の情報が必要なので、全ての会社の情報を取得します。
         $companies = Company::all();
+        $product = Product::all();
 
+        return view('products.edit', compact('product', 'companies'), [
+            'rules' => $validation->rules()
+        ]);
         // 商品編集画面を表示します。その際に、商品の情報と会社の情報を画面に渡します。
-        return view('product.edit', compact('product', 'companies'));
+       
     }
 
     public function update(Request $request, Product $product)
@@ -150,9 +161,8 @@ class ProductController extends Controller //コントローラークラスを�
         $product->save();
         // モデルインスタンスである$productに対して行われた変更をデータベースに保存するためのメソッド（機能）です。
 
-        // 全ての処理が終わったら、商品一覧画面に戻ります。
-        return redirect()->route('product.index')
-            ->with('success', 'Product updated successfully');
+        // 全ての処理が終わったら、リダイレクトします。
+        return view('product.edit', compact('product'));
         // ビュー画面にメッセージを代入した変数(success)を送ります
     }
 
@@ -163,7 +173,7 @@ class ProductController extends Controller //コントローラークラスを�
         $product->delete();
 
         // 全ての処理が終わったら、商品一覧画面に戻ります。
-        return redirect('/product');
+        return redirect('/products');
         //URLの/productsを検索します
         //products　/がなくても検索できます
     }

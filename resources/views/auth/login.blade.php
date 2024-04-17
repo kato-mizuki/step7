@@ -11,12 +11,11 @@
                     </th>
                 </tr>
             </thead>
-            <form method="POST" action="{{ route('login') }}">
-             @csrf
             <tbody>
                 <tr>
                     <td>
-                        
+                        <form method="POST" action="{{ route('login') }}">
+                            @csrf
 
                             
                             <div class="form-group row">
@@ -67,12 +66,11 @@
                                     </button>
                                 </div>
                             </div>
-                            
+                            </form>
                         </td>
 
                     </tr>
             </tbody>
-        </form>
         </table> 
     </div>
 </div>
