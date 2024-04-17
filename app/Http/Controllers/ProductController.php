@@ -13,6 +13,7 @@ class ProductController extends Controller //コントローラークラスを�
 {
     public function company(){
         $companies = Company::all();
+        $validation = new CreateRequest();
 
         return view('product.index', ['companies' => $companies]);
     }
