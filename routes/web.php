@@ -33,9 +33,9 @@ Auth::routes();
 // ルートが作成されます。
 //　つまりログイン画面に用意されたビューのリンク先がこの1行で済みます
 
-Route::group(['middleware' => 'auth'], function () {
-    Route::resource('products', ProductController::class);
-});
+
+Route::resource('products', ProductController::class);
+
 
 
 

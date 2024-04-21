@@ -14,32 +14,30 @@
 
         <div class="mb-3">
             <label for="product_name" class="form-label">商品名
-                @include('common.required',['rules' => $rules['product_name'] ?? ''])
+                <span class="required">*</span>
             </label>
             <input id="product_name" type="text" name="product_name" class="form-control" required>
         </div>
 
         <div class="mb-3">
             <label for="company_id" class="form-label">メーカー名
-                @include('common.required',['rules' => $rules['company_id'] ?? ''])
+             <span class="required">*</span>
             </label>
             <select class="form-select" id="company_id" name="company_id">
-                @foreach($companies as $company)
-                    <option value="{{ $company->id }}">{{ $company->company_name }}</option>
-                @endforeach
+            <option value="" selected disabled></option>
             </select>
         </div>
 
         <div class="mb-3">
             <label for="price" class="form-label">価格
-            @include('common.required',['rules' => $rules['price'] ?? ''])
+             <span class="required">*</span>
             </label>
             <input id="price" type="text" name="price" class="form-control" required>
         </div>
 
         <div class="mb-3">
             <label for="stock" class="form-label">在庫数
-            @include('common.required',['rules' => $rules['stock'] ?? ''])
+             <span class="required">*</span>
             </label>
             <input id="stock" type="text" name="stock" class="form-control" required>
         </div>

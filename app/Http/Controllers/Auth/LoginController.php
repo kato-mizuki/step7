@@ -37,4 +37,15 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    public function username()
+    {
+        return 'e-mail';
+    }
+
+    public function redirectPath()
+    {
+        return '/products';
+        //例）return 'costs/index';
+    }
 }

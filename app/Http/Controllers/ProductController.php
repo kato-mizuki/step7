@@ -2,7 +2,7 @@
 
 // まずは必要なモジュールを読み込んでいます。今回はProductとCompanyの情報と、リクエストの情報が必要です。
 namespace App\Http\Controllers;
-
+use App\Http\Requests\ValidateSample;
 use App\Models\Product; // Productモデルを現在のファイルで使用できるようにするための宣言です。
 use App\Models\Company; // Companyモデルを現在のファイルで使用できるようにするための宣言です。
 use App\Requests\CreateRequest; //バリデーション適用できるようにするのための宣言です。
@@ -40,9 +40,7 @@ class ProductController extends Controller //コントローラークラスを�
     
         // 商品一覧ビューを表示し、取得した商品情報をビューに渡す
         return view('product.index', ['products' => $products]);
-        return view('product.create', compact('companies'), [
-            'rules' => $validation->rules()
-        ]);
+       
     }
     
 
@@ -52,16 +50,14 @@ class ProductController extends Controller //コントローラークラスを�
     {
         // 商品作成画面で会社の情報が必要なので、全ての会社の情報を取得します。
         $companies = Company::all();
-        $validation = new CreateRequest();
-        return view('products.create', [
-            'rules' => $validation->rules(),
-        ]);
+       
+        return view('product.create');
         // 商品作成画面を表示します。その際に、先ほど取得した全ての会社情報を画面に渡します。
        
     }
 
     // 送られたデータをデータベースに保存するメソッドです
-    public function store(Request $request) // フォームから送られたデータを　$requestに代入して引数として渡している
+    public function store(ValidateSample $request) // フォームから送られたデータを　$requestに代入して引数として渡している
     {
         // リクエストされた情報を確認して、必要な情報が全て揃っているかチェックします。
         // ->validate()メソッドは送信されたリクエストデータが
@@ -135,9 +131,7 @@ class ProductController extends Controller //コントローラークラスを�
         $companies = Company::all();
         $product = Product::all();
 
-        return view('products.edit', compact('product', 'companies'), [
-            'rules' => $validation->rules()
-        ]);
+        return view('product.edit', compact('product'));
         // 商品編集画面を表示します。その際に、商品の情報と会社の情報を画面に渡します。
        
     }
@@ -179,4 +173,3 @@ class ProductController extends Controller //コントローラークラスを�
         //products　/がなくても検索できます
     }
 }
-
